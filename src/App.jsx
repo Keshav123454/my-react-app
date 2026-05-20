@@ -1,13 +1,33 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [data, setData] = useState([])
 
-  return (<>Hello World !</>)
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://dummyjson.com/users')
+      const result = await response.json()
+      const dataArray = Object.values(result)
+      setData(result.users)
+    } 
+    catch (error){
+      console.error("Error:", error)
+    }
+  }
+  return (
+  <>
+    <div>
+      <button onClick={fetchData}>Fetch Data</button>
+    </div>
+    <h2>User List</h2>
+    <ul>
+      {data.map((user, index) => (<li key={index}>
+                                  <b>id:</b> {user.id}, 
+                                  <b>name:</b> {user.firstName}, 
+                                  <b>age:</b> {user.age}</li>))}
+    </ul>
+  </>
+    )
 }
 
 export default App
